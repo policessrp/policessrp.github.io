@@ -316,10 +316,9 @@ $('#violate-data tbody').on('click', 'tr', function(e) {
 
 // Fungsi sederhana untuk simulasi jumlah visitor online
 function updateVisitorCount() {
-  var min = 5;
-  var max = 25;
-  var randomVisitors = Math.floor(Math.random() * (max - min + 1)) + min;
-  document.getElementById('visitorCount').textContent = "Pengunjung Online Saat Ini: " + randomVisitors + " Orang";
+  const nama = localStorage.getItem('namaPengunjung');
+  const visitorText = nama ? `Selamat datang, ${nama}` : "Pengunjung tidak dikenal";
+  document.getElementById('visitorCount').textContent = visitorText;
 }
 
 // Jalankan pertama kali
