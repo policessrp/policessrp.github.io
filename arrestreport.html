@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator BBCode - Arrest Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: white;
+      padding: 30px;
+    }
+    .form-control, .form-select {
+      background-color: #1f1f1f;
+      color: white;
+      border: 1px solid #555;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    textarea#result {
+      background: #1f1f1f;
+      color: #00e676;
+      font-family: monospace;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<div class="text-center mb-4">
+  <a href="menu.html" class="btn btn-outline-light btn-lg rounded-pill px-4 shadow">
+    ← Kembali ke Menu Utama
+  </a>
+</div>
+
+<body class="container">
+  <h2 class="mb-4">Generator BBCode - Arrest Report</h2>
+
+  <form id="bbcode-form">
+    <div class="mb-3"><label class="form-label">Nama Petugas</label><input type="text" class="form-control" id="fullname" required></div>
+    <div class="mb-3"><label class="form-label">Serial Number</label><input type="text" class="form-control" id="serial"></div>
+    <div class="mb-3"><label class="form-label">Pangkat</label><input type="text" class="form-control" id="rank"></div>
+    <div class="mb-3"><label class="form-label">Nama Tersangka</label><input type="text" class="form-control" id="suspect"></div>
+    <div class="mb-3"><label class="form-label">Tanggal Lahir Tersangka</label><input type="text" class="form-control" id="birth"></div>
+    <div class="mb-3"><label class="form-label">Charge(s)</label><input type="text" class="form-control" id="charges"></div>
+    <div class="mb-3"><label class="form-label">Unggah Foto Muka (Mugshot)</label><input type="file" class="form-control" id="mugshotFile"></div>
+    <div class="mb-3"><label class="form-label">Nama Barang Bukti</label><input type="text" class="form-control" id="evidenceName"></div>
+    <div class="mb-3"><label class="form-label">Jumlah Barang Bukti</label><input type="text" class="form-control" id="evidenceQty"></div>
+    <div class="mb-3"><label class="form-label">Unggah Gambar Barang Bukti</label><input type="file" class="form-control" id="evidenceImgFile"></div>
+
+    <button type="button" class="btn btn-warning" onclick="uploadImagesOneByOne()">Upload Gambar</button>
+    <button type="button" class="btn btn-success ms-2" onclick="generateBBCode()" id="generateBtn" disabled>Generate BBCode</button>
+    <button type="button" class="btn btn-secondary ms-2" onclick="copyBBCode()">Copy</button>
+  </form>
+
+  <textarea id="result" rows="30" class="form-control mt-4" readonly></textarea>
+
+  <script>
+    const imgurClientId = '894beeef6cd80f4';
+    let mugshotLink = '';
+    let evidenceImgLink = '';
+
+    async function uploadImage(file, label) {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      Swal.fire({
+        title: `Mengunggah ${label}...`,
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      const response = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: { Authorization: `Client-ID ${imgurClientId}` },
+        body: formData
+      });
+
+      const data = await response.json();
+      Swal.close();
+      return data.success ? data.data.link : '';
+    }
+
+    async function uploadImagesOneByOne() {
+      const mugshotFile = document.getElementById('mugshotFile').files[0];
+      const evidenceFile = document.getElementById('evidenceImgFile').files[0];
+
+      if (!mugshotFile || !evidenceFile) {
+        Swal.fire('Gagal', 'Silakan unggah kedua gambar terlebih dahulu.', 'error');
+        return;
+      }
+
+      mugshotLink = await uploadImage(mugshotFile, 'Foto Muka');
+      evidenceImgLink = await uploadImage(evidenceFile, 'Barang Bukti');
+
+      if (mugshotLink && evidenceImgLink) {
+        Swal.fire('Berhasil', 'Gambar berhasil diunggah!', 'success');
+        document.getElementById('generateBtn').disabled = false;
+      } else {
+        Swal.fire('Gagal', 'Salah satu gambar gagal diunggah.', 'error');
+      }
+    }
+
+    function generateBBCode() {
+      const name = document.getElementById('fullname').value;
+      const serial = document.getElementById('serial').value;
+      const rank = document.getElementById('rank').value;
+      const suspect = document.getElementById('suspect').value;
+      const birth = document.getElementById('birth').value;
+      const charges = document.getElementById('charges').value;
+      const evidenceName = document.getElementById('evidenceName').value;
+      const evidenceQty = document.getElementById('evidenceQty').value;
+
+      const bbcode = `[divbox=white]
+[align=center]SAN ANDREAS POLICE
+[b]ARREST REPORT[/b][/align]
+[hr]
+[align=center][b]OFFICER IDENTIFICATION FORMS[/b][/align]
+[table=1,91]
+  [tr]
+      [td][align=center][b]OFFICER NAME[/b][/align]
+      [td][align=center][b]SERIAL NUMBER[/b][/align]
+      [td][align=center][b]RANK[/b][/align]
+  [tr]
+      [td]${name}
+      [td]${serial}
+      [td]${rank}
+[/table]
+[space]
+[align=center][b]SUSPECT IDENTIFICATION FORMS[/b][/align]
+[table=1,91]
+  [tr]
+      [td][align=center][b]ARESTEE FULLNAME[/b][/align]
+      [td][align=center][b]ARESTEE BIRTHDATE[/b][/align]
+      [td][align=center][b]ARESTEE CHARGE(S)[/b][/align]
+      [td][align=center][b]DETAINE BY[/b][/align]
+  [tr]
+      [td]${suspect}
+      [td]${birth}
+      [td]${charges}
+      [td]
+[cb]Categorial Use of Force [size=1][color=transparent]PILIH INI KALAU SUSPEK DITANGKAP KARENA MENGGUNAKAN TAZER, DAN SEJENISNYA. UNTUK MEMILIH SILAHKAN GANTI (cb) menjadi (cbc)[/color][/size]
+[cb]Officer Involved Shooting [size=1][color=transparent]PILIH INI KALAU SUSPEK DITANGKAP KARENA MENEMBAK KE OFFICER. UNTUK MEMILIH SILAHKAN GANTI (cb) menjadi (cbc)[/color][/size]
+[/table]
+[table=1,91]
+  [tr]
+      [td][align=center][b]ARESTEE MUNGSHOTS[/b][/align]
+  [tr]
+      [td][spoiler][img]${mugshotLink}[/img][/spoiler]
+[/table]
+[space]
+[align=center][b]EVIDANCE IDENTIFICATION FORMS[/b][/align]
+[table=1,91]
+  [tr]
+      [td][align=center][b]EVIDANCE NAME[/b][/align]
+      [td][align=center][b]QUANTITY(S)[/b][/align]
+      [td][align=center][b]EXHIBIT(S)[/b][/align]
+  [tr]
+      [td]${evidenceName}
+      [td]${evidenceQty}
+      [td][spoiler][img]${evidenceImgLink}[/img][/spoiler]
+[/table]
+[hr]
+[align=right]* FOR SERGEANT+ USE ONLY![/align]
+[align=center][b]SUPERVISOR IDENTIFICATION FORMS[/b][/align]
+[table=1,91]
+  [tr]
+      [td][align=center][b]SUPERVISOR NAME[/b][/align]
+      [td][align=center][b]SERIAL NUMBER[/b][/align]
+      [td][align=center][b]SUPERVISOR SIGNATURE[/b][/align]
+  [tr]
+      [td]BIARKAN SERGEANT+ YANG MENGISI (NAMA SERGEANT+ ISI DISINI)
+      [td]BIARKAN SERGEANT+ YANG MENGISI (BADGE SERGEANT+ ISI DISINI)
+      [td][fimg=200,81]ISI LINK SIGNATURE KAMU[/fimg]
+[/table]
+[/divbox]`;
+
+      document.getElementById('result').value = bbcode;
+    }
+
+    function copyBBCode() {
+      const result = document.getElementById('result');
+      result.select();
+      document.execCommand('copy');
+      Swal.fire('Disalin!', 'BBCode telah disalin ke clipboard.', 'success');
+    }
+  </script>
+</body>
+</html>

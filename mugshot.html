@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mugshot Warrant Gallery</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #ff4c4c;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .gallery img {
+      width: 100%;
+      border: 2px solid #444;
+      border-radius: 4px;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+      border-color: #ff4c4c;
+    }
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 2px;
+      padding: 12px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+    }
+    .toast.show {
+      visibility: visible;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+    @keyframes fadein {
+      from { bottom: 0; opacity: 0; }
+      to { bottom: 30px; opacity: 1; }
+    }
+    @keyframes fadeout {
+      from { bottom: 30px; opacity: 1; }
+      to { bottom: 0; opacity: 0; }
+    }
+  </style>
+</head>
+<!-- Tombol Kembali ke Menu -->
+<a href="menu.html" class="btn btn-outline-light position-absolute top-0 start-0 m-3">
+  ⬅ Kembali ke Menu
+</a>
+<body>
+  <h1>Mugshot Warrant Gallery</h1>
+  <div class="gallery" id="gallery"></div>
+  <div id="toast" class="toast">Link copied to clipboard!</div>
+  <script>
+    const imageUrls = `https://i.postimg.cc/d1vf6GN5/0.jpg
+https://i.postimg.cc/Y93ssjJM/1.jpg
+https://i.postimg.cc/SR1tm3SP/10.jpg
+https://i.postimg.cc/59sr5YBm/100.jpg
+https://i.postimg.cc/VvkVQm8M/101.jpg
+https://i.postimg.cc/65TmMWzx/102.jpg
+https://i.postimg.cc/DyDYD9YJ/103.jpg
+https://i.postimg.cc/XYCD0sT2/104.jpg
+https://i.postimg.cc/R0xpCcmv/105.jpg
+https://i.postimg.cc/TPj7Kp2g/106.jpg
+https://i.postimg.cc/xC0sMnq7/107.jpg
+https://i.postimg.cc/gjjNtsVH/108.jpg
+https://i.postimg.cc/hjp206dG/109.jpg
+https://i.postimg.cc/kGHw0Sw3/11.jpg
+https://i.postimg.cc/G3gMT0R7/110.jpg
+https://i.postimg.cc/BQ8mxhQq/111.jpg
+https://i.postimg.cc/02LcZpb7/112.jpg
+https://i.postimg.cc/13wMdfq2/113.jpg
+https://i.postimg.cc/SK4VbkLs/114.jpg
+https://i.postimg.cc/25xGzMTx/115.jpg
+https://i.postimg.cc/XJ78XLz6/116.jpg
+https://i.postimg.cc/zBtkhhsb/117.jpg
+https://i.postimg.cc/3NkFFRhL/118.jpg
+https://i.postimg.cc/hvNbyBPK/12.jpg
+https://i.postimg.cc/fWPKTx71/120.jpg
+https://i.postimg.cc/Nfrxy5pF/121.jpg
+https://i.postimg.cc/sgd45sNc/122.jpg
+https://i.postimg.cc/g2VqD19P/123.jpg
+https://i.postimg.cc/43XvFwZH/124.jpg
+https://i.postimg.cc/k5wNr8X1/125.jpg
+https://i.postimg.cc/gJJVGJxY/126.jpg
+https://i.postimg.cc/NMz1FcXR/127.jpg
+https://i.postimg.cc/vTx56N7k/128.jpg
+https://i.postimg.cc/K4XB7DJz/129.jpg
+https://i.postimg.cc/668P06MJ/13.jpg
+https://i.postimg.cc/9XsnN3k4/130.jpg
+https://i.postimg.cc/J4Jdf6wp/131.jpg
+https://i.postimg.cc/T36HfVff/132.jpg
+https://i.postimg.cc/g2HtJx2R/133.jpg
+https://i.postimg.cc/R0CsnvWY/134.jpg
+https://i.postimg.cc/8CyyRxWz/135.jpg
+https://i.postimg.cc/63gYSRMs/136.jpg
+https://i.postimg.cc/85jZtwBB/137.jpg
+https://i.postimg.cc/cC3XNHzv/138.jpg
+https://i.postimg.cc/T25kb7PT/139.jpg
+https://i.postimg.cc/65sMfr7n/14.jpg
+https://i.postimg.cc/pXDqGm87/140.jpg
+https://i.postimg.cc/2SrTPC75/141.jpg
+https://i.postimg.cc/L8DvSGx3/142.jpg
+https://i.postimg.cc/0NNnyZ3R/143.jpg
+https://i.postimg.cc/QMnb91GB/144.jpg
+https://i.postimg.cc/mDzSQkBm/145.jpg
+https://i.postimg.cc/mDvyV4rB/146.jpg
+https://i.postimg.cc/nrqYPWs7/147.jpg
+https://i.postimg.cc/4NT19XM1/148.jpg
+https://i.postimg.cc/QN7bCF6t/15.jpg
+https://i.postimg.cc/Nf7k8Wvv/150.jpg
+https://i.postimg.cc/K8Gr0Jmk/151.jpg
+https://i.postimg.cc/L8xkwLsy/152.jpg
+https://i.postimg.cc/N0L8cF9Q/153.jpg
+https://i.postimg.cc/pd7fXvzz/154.jpg
+https://i.postimg.cc/V6CjJhWT/155.jpg
+https://i.postimg.cc/wMYDLkWB/156.jpg
+https://i.postimg.cc/MH0VDj4m/157.jpg
+https://i.postimg.cc/ZY68Z1Rv/158.jpg
+https://i.postimg.cc/pXxDdqhG/159.jpg
+https://i.postimg.cc/nckq9BqH/16.jpg
+https://i.postimg.cc/522LBym8/160.jpg
+https://i.postimg.cc/dVNd4FWp/161.jpg
+https://i.postimg.cc/jjWf11m5/162.jpg
+https://i.postimg.cc/CKW8pNp4/163.jpg
+https://i.postimg.cc/50LC4CxW/164.jpg
+https://i.postimg.cc/cCW8rLHg/165.jpg
+https://i.postimg.cc/90BwTHRx/166.jpg
+https://i.postimg.cc/tRdx8WSh/167.jpg
+https://i.postimg.cc/vHQVyTkC/168.jpg
+https://i.postimg.cc/ZKVy5Zhn/169.jpg
+https://i.postimg.cc/qvq6tYkL/17.jpg
+https://i.postimg.cc/3xq42BNH/170.jpg
+https://i.postimg.cc/3wDy1v00/171.jpg
+https://i.postimg.cc/fLnVrRY2/172.jpg
+https://i.postimg.cc/Ss6nFbry/173.jpg
+https://i.postimg.cc/6qByBbjC/174.jpg
+https://i.postimg.cc/x8gq8Ghh/175.jpg
+https://i.postimg.cc/BZCjmsbp/176.jpg
+https://i.postimg.cc/gkkn556W/177.jpg
+https://i.postimg.cc/HsZVC2Q7/178.jpg
+https://i.postimg.cc/QdFVNTbY/179.jpg
+https://i.postimg.cc/9Qs0DQgm/18.jpg
+https://i.postimg.cc/XvFJd6tw/180.jpg
+https://i.postimg.cc/qRT7GZdW/181.jpg
+https://i.postimg.cc/Jn5zYcr0/182.jpg
+https://i.postimg.cc/GtMhdLs1/183.jpg
+https://i.postimg.cc/SRQNB2Rr/184.jpg
+https://i.postimg.cc/L4vszTQ0/185.jpg
+https://i.postimg.cc/c4HLTnV1/186.jpg
+https://i.postimg.cc/ncPcWLJ4/187.jpg
+https://i.postimg.cc/T35YvXdZ/188.jpg
+https://i.postimg.cc/zfmDJP33/189.jpg
+https://i.postimg.cc/YS1rjfmR/19.jpg
+https://i.postimg.cc/tTpX6Z3j/190.jpg
+https://i.postimg.cc/fLCMfzC0/191.jpg
+https://i.postimg.cc/7hLwBFtt/192.jpg
+https://i.postimg.cc/NFPYZdWs/193.jpg
+https://i.postimg.cc/HWSpJLjq/194.jpg
+https://i.postimg.cc/02FPfHYZ/195.jpg
+https://i.postimg.cc/rFKq5LrK/196.jpg
+https://i.postimg.cc/YCFkyf87/197.jpg
+https://i.postimg.cc/FKQmtdnL/198.jpg
+https://i.postimg.cc/sXjrxFzf/199.jpg
+https://i.postimg.cc/yNXK71wr/2.jpg
+https://i.postimg.cc/XJs0y2Nf/20.jpg
+https://i.postimg.cc/tJ7Gdh7L/200.jpg
+https://i.postimg.cc/mkqfmtHh/201.jpg
+https://i.postimg.cc/NGPcsPzY/202.jpg
+https://i.postimg.cc/jdwrLQpf/203.jpg
+https://i.postimg.cc/m2vWM145/204.jpg
+https://i.postimg.cc/Bn29CZQQ/205.jpg
+https://i.postimg.cc/KYFXpXR7/206.jpg
+https://i.postimg.cc/tgzKLrxK/207.jpg
+https://i.postimg.cc/bJN78Q0s/209.jpg
+https://i.postimg.cc/Kj1C3xHb/21.jpg
+https://i.postimg.cc/hjyHGfMM/210.jpg
+https://i.postimg.cc/Gt6VkVWy/211.jpg
+https://i.postimg.cc/7PRF8J5Z/212.jpg
+https://i.postimg.cc/ZKy1TYNF/213.jpg
+https://i.postimg.cc/0yRhrgdg/214.jpg
+https://i.postimg.cc/Nj6SHNpK/215.jpg
+https://i.postimg.cc/TPTSqr4C/216.jpg
+https://i.postimg.cc/JhKFTswm/217.jpg
+https://i.postimg.cc/cHHbPdZ3/218.jpg
+https://i.postimg.cc/DZMMTRyM/219.jpg
+https://i.postimg.cc/5yQkNpXN/22.jpg
+https://i.postimg.cc/XXM1ZF5K/220.jpg
+https://i.postimg.cc/DfW2XTsm/221.jpg
+https://i.postimg.cc/zD9qwcS7/222.jpg
+https://i.postimg.cc/kXKqTvTm/223.jpg
+https://i.postimg.cc/Vkw1p0hb/224.jpg
+https://i.postimg.cc/8zbDSP8X/225.jpg
+https://i.postimg.cc/9fF2F5Cm/226.jpg
+https://i.postimg.cc/6QjX8jpd/227.jpg
+https://i.postimg.cc/sXMR7YMb/228.jpg
+https://i.postimg.cc/vBCwz49T/229.jpg
+https://i.postimg.cc/5yvdkfq3/23.jpg
+https://i.postimg.cc/Vsb8NFQC/230.jpg
+https://i.postimg.cc/65JN4Gt1/231.jpg
+https://i.postimg.cc/c4RGR4J1/232.jpg
+https://i.postimg.cc/2STptcvP/233.jpg
+https://i.postimg.cc/kg73f3VQ/234.jpg
+https://i.postimg.cc/5t0cWBSj/235.jpg
+https://i.postimg.cc/VNHxfJKg/236.jpg
+https://i.postimg.cc/9MRvrcSh/237.jpg
+https://i.postimg.cc/tTK86LQV/238.jpg
+https://i.postimg.cc/wMDZQ0g4/239.jpg
+https://i.postimg.cc/qBKPrMyc/24.jpg
+https://i.postimg.cc/WbPQ1LwB/240.jpg
+https://i.postimg.cc/65LF7jHy/241.jpg
+https://i.postimg.cc/XYjm9fhx/242.jpg
+https://i.postimg.cc/L8x7DqFS/243.jpg
+https://i.postimg.cc/43n0SJX9/244.jpg
+https://i.postimg.cc/q7YFf97Z/245.jpg
+https://i.postimg.cc/PxwRd2pf/246.jpg
+https://i.postimg.cc/6qx1qnnr/247.jpg
+https://i.postimg.cc/QCgYTCJR/248.jpg
+https://i.postimg.cc/VsXVTZPD/249.jpg
+https://i.postimg.cc/9FVnjPWV/25.jpg
+https://i.postimg.cc/rFJYydm4/250.jpg
+https://i.postimg.cc/jSS3DswF/251.jpg
+https://i.postimg.cc/4x2LtrpN/252.jpg
+https://i.postimg.cc/KYK95J57/253.jpg
+https://i.postimg.cc/XvTs1d2R/255.jpg
+https://i.postimg.cc/JnZPf0vG/256.jpg
+https://i.postimg.cc/cCWX0ZGT/257.jpg
+https://i.postimg.cc/brRLvMzP/258.jpg
+https://i.postimg.cc/mZ3mVc7n/259.jpg
+https://i.postimg.cc/m2b8nbwg/26.jpg
+https://i.postimg.cc/K8jQZJCX/260.jpg
+https://i.postimg.cc/9FJJ5v8t/261.jpg
+https://i.postimg.cc/2StG3nf1/262.jpg
+https://i.postimg.cc/wBsVN360/263.jpg
+https://i.postimg.cc/LXKV3R5R/264.jpg
+https://i.postimg.cc/j5H489nf/268.jpg
+https://i.postimg.cc/gjGq1D3T/269.jpg
+https://i.postimg.cc/qqQXr3LM/27.jpg
+https://i.postimg.cc/VsFFnx8Q/270.jpg
+https://i.postimg.cc/rFFNJfVd/271.jpg
+https://i.postimg.cc/RVsQbwhg/272.jpg
+https://i.postimg.cc/QdFkLVWh/28.jpg
+https://i.postimg.cc/d0d21XBf/29.jpg
+https://i.postimg.cc/HkF0THQ5/290.jpg
+https://i.postimg.cc/85ShrHXz/291.jpg
+https://i.postimg.cc/RFLw1H2Q/292.jpg
+https://i.postimg.cc/tJRWBgj0/293.jpg
+https://i.postimg.cc/C5vDXVhR/294.jpg
+https://i.postimg.cc/Y281hQ6t/295.jpg
+https://i.postimg.cc/dt1GdD6r/296.jpg
+https://i.postimg.cc/ZKMpLZsg/297.jpg
+https://i.postimg.cc/MpfRP4hG/298.jpg
+https://i.postimg.cc/25pWPGD7/299.jpg
+https://i.postimg.cc/pdDjxjVb/3.jpg
+https://i.postimg.cc/XJ4CvvXZ/30.jpg
+https://i.postimg.cc/QtmWKrWf/300.jpg
+https://i.postimg.cc/tJgnhm3p/301.jpg
+https://i.postimg.cc/FzndGgpc/302.jpg
+https://i.postimg.cc/4489JsGd/303.jpg
+https://i.postimg.cc/dtLT3pQ9/304.jpg
+https://i.postimg.cc/02FKwnb1/305.jpg
+https://i.postimg.cc/t46Zt6xZ/306.jpg
+https://i.postimg.cc/rpLdhp1h/307.jpg
+https://i.postimg.cc/HL4rFC3T/31.jpg
+https://i.postimg.cc/KzG12ssB/32.jpg
+https://i.postimg.cc/76KfYMpc/33.jpg
+https://i.postimg.cc/Bbtt8P3v/34.jpg
+https://i.postimg.cc/VvTvXssW/35.jpg
+https://i.postimg.cc/fWgJGC7S/36.jpg
+https://i.postimg.cc/SN2Jk9VT/37.jpg
+https://i.postimg.cc/m2vhDr5b/38.jpg
+https://i.postimg.cc/Hkbn7Cqb/39.jpg
+https://i.postimg.cc/zf5BCcN6/4.jpg
+https://i.postimg.cc/6Q0QYf53/40.jpg
+https://i.postimg.cc/hjttwQf0/41.jpg
+https://i.postimg.cc/HxvkCWM1/43.jpg
+https://i.postimg.cc/WzDbpRmF/44.jpg
+https://i.postimg.cc/x8Wjcsgs/45.jpg
+https://i.postimg.cc/jq9Sg5Kz/46.jpg
+https://i.postimg.cc/BQKQd0QR/47.jpg
+https://i.postimg.cc/rw2FTPDs/48.jpg
+https://i.postimg.cc/ht84t1mr/49.jpg
+https://i.postimg.cc/25zkbLFf/5.jpg
+https://i.postimg.cc/yNvVF6v3/50.jpg
+https://i.postimg.cc/9M0c13n8/51.jpg
+https://i.postimg.cc/C5fSTGYb/52.jpg
+https://i.postimg.cc/JnFM26w1/53.jpg
+https://i.postimg.cc/5jd1xXNT/54.jpg
+https://i.postimg.cc/2jqZ8gS7/55.jpg
+https://i.postimg.cc/gcf6w4wF/56.jpg
+https://i.postimg.cc/65n4CRR7/57.jpg
+https://i.postimg.cc/T3xL0wqt/58.jpg
+https://i.postimg.cc/MpYcFS9q/59.jpg
+https://i.postimg.cc/TPYy84sm/6.jpg
+https://i.postimg.cc/9f8DcB3k/60.jpg
+https://i.postimg.cc/C1Rz5fSx/61.jpg
+https://i.postimg.cc/ZRX0dK5F/62.jpg
+https://i.postimg.cc/hvxvbWJF/63.jpg
+https://i.postimg.cc/pVnmt8s0/64.jpg
+https://i.postimg.cc/ncbCVz5n/66.jpg
+https://i.postimg.cc/PrWNCHsY/67.jpg
+https://i.postimg.cc/HkTn5NdK/68.jpg
+https://i.postimg.cc/wjFvkkBB/69.jpg
+https://i.postimg.cc/wBvB4stQ/7.jpg
+https://i.postimg.cc/nLPhycBb/70.jpg
+https://i.postimg.cc/j5nSt04W/71.jpg
+https://i.postimg.cc/kGrX51TT/72.jpg
+https://i.postimg.cc/0jp5KY3P/73.jpg
+https://i.postimg.cc/DfswNhzH/75.jpg
+https://i.postimg.cc/Kv28SWkz/76.jpg
+https://i.postimg.cc/ZKxKTLpL/77.jpg
+https://i.postimg.cc/ht44h70R/78.jpg
+https://i.postimg.cc/W19NZb9F/79.jpg
+https://i.postimg.cc/9frWY5Sx/80.jpg
+https://i.postimg.cc/hG6KCZRK/81.jpg
+https://i.postimg.cc/tT6p8d9W/82.jpg
+https://i.postimg.cc/gjPmpw05/83.jpg
+https://i.postimg.cc/6qLwp92Q/84.jpg
+https://i.postimg.cc/1RpyHKCZ/85.jpg
+https://i.postimg.cc/tCppmVwn/87.jpg
+https://i.postimg.cc/CL7SyxpP/88.jpg
+https://i.postimg.cc/CxKYwpFF/89.jpg
+https://i.postimg.cc/kghC4Y4W/9.jpg
+https://i.postimg.cc/hGzB78z6/90.jpg
+https://i.postimg.cc/g0CPyw3J/91.jpg
+https://i.postimg.cc/nzqf3H11/92.jpg
+https://i.postimg.cc/tJyQfLSG/93.jpg
+https://i.postimg.cc/L5TKMNwY/94.jpg
+https://i.postimg.cc/kMFd8gGJ/95.jpg
+https://i.postimg.cc/xTfVPVNK/96.jpg
+https://i.postimg.cc/SNgFT1cH/97.jpg
+https://i.postimg.cc/dVDMzRB3/98.jpg
+https://i.postimg.cc/rwb6cdnJ/99.jpg
+`.trim().split('\n');
+
+    const gallery = document.getElementById('gallery');
+    imageUrls.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = "Mugshot";
+      img.onclick = () => copyToClipboard(url);
+      gallery.appendChild(img);
+    });
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById("toast");
+        toast.className = "toast show";
+        setTimeout(() => toast.className = toast.className.replace("show", ""), 3000);
+      });
+    }
+  </script>
+</body>
+</html>
