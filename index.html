@@ -12,96 +12,92 @@
 <div class="text-center px-3" style="max-width: 400px; width: 100%;">
   <img src="assets/brand/sapd.png" alt="SAPD Logo" width="120" class="mb-4">
   <h1 class="mb-4">Selamat Datang</h1>
-  <p>Masukkan nama Anda untuk melanjutkan:</p>
-  <input type="text" id="namaPengunjung" class="form-control text-center mb-3" placeholder="Nama Anda">
-<button id="btnLanjutkan" onclick="lanjutkan()" class="btn btn-primary">Lanjutkan</button>
+  <p>Masukkan nama dan password Anda:</p>
+  <input type="text" id="namaPengunjung" class="form-control text-center mb-2" placeholder="Nama Anda">
+  <input type="password" id="passwordPengunjung" class="form-control text-center mb-3" placeholder="Password">
+  <button id="btnLanjutkan" onclick="lanjutkan()" class="btn btn-primary">Lanjutkan</button>
+  
 </div>
 
 <script>
-// Daftar username yang boleh masuk (whitelist)
-const allowedUsers = [
-  "Internal Affair",
-  "Bueno Boulwins",
-  "Calvin Brown",
-  "Rashard Westbrook",
-  "Stephanie Floriska",
-  "Dean Mcdavian",
-  "Police Department",
-  "Leon Gallardo",
-  "Liam Fischer",
-  "Francisco Calypso",
-  "Alexander Golovin",
-  "Henry Wilkinson",
-  "Renjiro Matsuda",
-  "Richard Dawson",
-  "Naladhipa Dineschara",
-  "George Parker",
-  "Nicholas Rasmussen",
-  "Louie Provenza",
-  "Brooklyn Jackson",
-  "Draymond Westbrook",
-  "Samuel Forrester",
-  "Gerardo Montreal",
-  "Kyle Jocelyn",
-  "Robert Schweintseiger",
-  "Troylen Love",
-  "Theron Caesarion",
-  "Mackenzie Edmondo",
-  "Jolly Weasle",
-  "Roy Javuer",
-  "Wang Chunying",
-  "Aquilla Gustavo",
-  "Jeramine Khareem",
-  "David McTavish",
-  "Robert Ladonna",
-  "Frankie Harry",
-  "Robert Baratheon",
-  "Kenzo Kurooto",
-  "Christopher Machakw",
-  "Kin Mamoru",
-  "Alejandro Graves",
-  "Calaryn Cavalleria",
-  "Eugene Niel",
-  "Lucien Beauregard",
-   "Mameth Dunn",
-   "Jesse Hartnett",
-  // tambah nama lain dari forum kamu
-];
+const allowedUsers = {
+  "Internal Affair": "12345",
+  "Bueno Bouwlins": "12345",
+  "Calvin Brown": "12345",
+  "Rashard Westbrook": "12345",
+  "Stephanie Floriska": "12345",
+  "Dean Mcdavian": "11367",
+  "Police Department": "12345",
+  "Leon Gallardo": "12345",
+  "Liam Fischer": "12345",
+  "Francisco Calypso": "12345",
+  "Alexander Golovin": "12345",
+  "Henry Wilkinson": "12345",
+  "Renjiro Matsuda": "12345",
+  "Richard Dawson": "12345",
+  "Naladhipa Dineschara": "12345",
+  "George Parker": "12345",
+  "Nicholas Rasmussen": "12345",
+  "Louie Provenza": "12345",
+  "Brooklyn Jackson": "12345",
+  "Draymond Westbrook": "12345",
+  "Samuel Forrester": "12345",
+  "Gerardo Montreal": "12345",
+  "Kyle Jocelyn": "12345",
+  "Robert Schweintseiger": "12345",
+  "Troylen Love": "12345",
+  "Theron Caesarion": "12345",
+  "Mackenzie Edmondo": "12345",
+  "Jolly Weasle": "12345",
+  "Roy Javuer": "12345",
+  "Wang Chunying": "12345",
+  "Aquilla Gustavo": "12345",
+  "Jeramine Khareem": "12345",
+  "David McTavish": "12345",
+  "Robert Ladonna": "12345",
+  "Frankie Harry": "12345",
+  "Robert Baratheon": "12345",
+  "Kenzo Kurooto": "12345",
+  "Christopher Machakw": "12345",
+  "Kin Mamoru": "12345",
+  "Alejandro Graves": "12345",
+  "Calaryn Cavalleria": "12345",
+  "Eugene Niel": "12345",
+  "Lucien Beauregard": "12345",
+  "Mameth Dunn": "12345",
+  "Jesse Hartnett": "12345"
+};
 
-// Fungsi untuk klik Lanjutkan
-function lanjutkan() {
-  var nama = document.getElementById('namaPengunjung').value.trim();
-  if (nama === "") {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Nama Kosong!',
-      text: 'Harap isi nama terlebih dahulu!',
-      confirmButtonText: 'Oke'
-    });
-    return;
+  
+  // Fungsi untuk klik Lanjutkan
+  function lanjutkan() {
+    const nama = document.getElementById('namaPengunjung').value.trim();
+    const password = document.getElementById('passwordPengunjung').value;
+  
+    if (nama === "" || password === "") {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Form Kosong!',
+        text: 'Harap isi nama dan password terlebih dahulu!',
+        confirmButtonText: 'Oke'
+      });
+      return;
+    }
+  
+    if (allowedUsers[nama] && allowedUsers[nama] === password) {
+      localStorage.setItem('namaPengunjung', nama);
+      window.location.href = "menu.html";
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Akses Ditolak!',
+        text: 'Nama atau password salah.',
+        confirmButtonText: 'Kembali'
+      });
+    }
   }
-
-  if (allowedUsers.includes(nama)) {
-    localStorage.setItem('namaPengunjung', nama);
-    window.location.href = "menu.html";
-  } else {
-    Swal.fire({
-      icon: 'error',
-      title: 'Akses Ditolak!',
-      text: 'Anda tidak terdaftar sebagai anggota San Andreas Police Department.',
-      confirmButtonText: 'Kembali'
-    });
-  }
-}
-
-// Tekan ENTER di input = klik tombol Lanjutkan
-document.getElementById("namaPengunjung").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("btnLanjutkan").click();
-  }
-});
-</script>
+  </script>
+  
 <style>
   input, button {
     font-size: 1.1rem;
