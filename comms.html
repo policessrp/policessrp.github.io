@@ -189,21 +189,32 @@ summary:hover {
     transform: translateY(0);
   }
 }
-      @media (max-width: 576px) {
-  .menu-button {
-    width: 100px;
-    height: 100px;
-    font-size: 0.9rem;
-  }
+.back-to-menu {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background: #00aaff;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px #00aaff;
+  cursor: pointer;
+  z-index: 1000;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
 
-  .menu-button i {
-    font-size: 1.5rem;
-  }
-}</style>
+.back-to-menu:hover {
+  background: #0088cc;
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px #00cfff;
+}
+
+
+  </style>
 </head>
-<button onclick="window.location.href='menu.html'" style="padding:10px 20px; font-size:16px; background-color:#4CAF50; color:white; border:none; border-radius:8px; cursor:pointer;">
-  ⬅ Kembali ke Menu
-</button>
 <body>
   <div class="container">
     <h1>Protocol Comunication</h1>
@@ -279,11 +290,6 @@ Code 7 : Istirahat, tidak bisa dihubungi.
       </div>
     </details>
   </div>
-<div class="text-center mb-4">
-  <a href="menu.html" class="btn btn-outline-light btn-lg rounded-pill px-4 shadow">
-    Kembali ke Menu Utama
-  </a>
-</div>
 
 <div class="chat-avatar" onclick="toggleChatBubble()">
   <img src="https://i.ibb.co.com/27jdnYSP/aifaceswap-e857e7810a595fb58f0cd89894f0fd5d.jpg" alt="Avatar" />
@@ -336,7 +342,18 @@ function showNextText() {
     showNextText(); // tampil pertama
     setInterval(showNextText, 8000); // ganti tiap 4 detik
   });
+  
 </script>
+<script>
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+</script>
+
+<a href="menu.html" class="back-to-menu">⬅ Kembali ke Menu</button>
 
 </body>
 </html>
