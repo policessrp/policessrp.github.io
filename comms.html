@@ -189,9 +189,17 @@ summary:hover {
     transform: translateY(0);
   }
 }
+      @media (max-width: 576px) {
+  .menu-button {
+    width: 100px;
+    height: 100px;
+    font-size: 0.9rem;
+  }
 
-
-  </style>
+  .menu-button i {
+    font-size: 1.5rem;
+  }
+}</style>
 </head>
 <button onclick="window.location.href='menu.html'" style="padding:10px 20px; font-size:16px; background-color:#4CAF50; color:white; border:none; border-radius:8px; cursor:pointer;">
   ⬅ Kembali ke Menu
@@ -271,6 +279,11 @@ Code 7 : Istirahat, tidak bisa dihubungi.
       </div>
     </details>
   </div>
+<div class="text-center mb-4">
+  <a href="menu.html" class="btn btn-outline-light btn-lg rounded-pill px-4 shadow">
+    Kembali ke Menu Utama
+  </a>
+</div>
 
 <div class="chat-avatar" onclick="toggleChatBubble()">
   <img src="https://i.ibb.co.com/27jdnYSP/aifaceswap-e857e7810a595fb58f0cd89894f0fd5d.jpg" alt="Avatar" />
