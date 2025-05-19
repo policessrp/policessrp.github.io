@@ -55,6 +55,142 @@
     }
 
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+.chat-avatar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.chat-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #00aaff;
+  box-shadow: 0 0 10px #00aaff;
+  transition: transform 0.3s ease;
+}
+
+.chat-avatar:hover img {
+  transform: scale(1.1);
+}
+
+.chat-avatar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 1000;
+}
+
+.chat-avatar {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.chat-bubble {
+  display: none;
+  background: #1e1e2f;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 15px 15px 15px 0;
+  max-width: 320px; /* semula 240px */
+  min-width: 160px;
+  white-space: normal; /* pastikan wrap jika terlalu panjang */
+  word-break: break-word; /* patah kata jika perlu */
+  box-shadow: 0 0 10px #00aaff;
+  font-size: 0.9rem;
+  font-family: 'Orbitron', sans-serif;
+  animation: fadeIn 0.3s ease-in-out;
+  position: absolute;
+  right: 70px;
+  bottom: 0;
+  text-align: left;
+  width: fit-content;
+  white-space: pre-line;
+
+
+}
+
+/* Ekor gelembung */
+.chat-bubble::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  bottom: 10px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid #1e1e2f;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+details {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #008cff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+details:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 15px #00aaff;
+}
+
+summary {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+summary:hover {
+  color: #00aaff;
+}
+.fade-text {
+  opacity: 0;
+  animation: fadeInText 0.6s forwards;
+}
+
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
   </style>
 </head>
 <body>
@@ -132,5 +268,59 @@ Code 7 : Istirahat, tidak bisa dihubungi.
       </div>
     </details>
   </div>
+
+<div class="chat-avatar" onclick="toggleChatBubble()">
+  <img src="https://i.ibb.co.com/27jdnYSP/aifaceswap-e857e7810a595fb58f0cd89894f0fd5d.jpg" alt="Avatar" />
+  <div class="chat-bubble" id="chatBubble">
+    <span id="chatText">Halo! Ada yang bisa saya bantu?</span>
+  </div>
+</div>
+</div>
+<script>
+  const texts = [
+    "Hello there!",
+    "saya Captain Mcdavian akan mengajari kalian",
+    "Untuk format melakukan radio adalah UNIT, showing TENCODE 10-20 LOCATION, CODE.",
+    "/r 1-ADAM-1 show me 10-55 on 10-60'jelaskan kendaraannya' and CODE-4",
+    "Jika masih bingung dengan artinya, silahkan anda buka seluruh section di atas!",
+    "Terimakasih dan selamat bertugas."
+  ];
+
+  let index = 0;
+
+  function toggleChatBubble() {
+    const bubble = document.getElementById('chatBubble');
+    bubble.style.display = bubble.style.display === 'block' ? 'none' : 'block';
+  }
+
+function typeText(text, element) {
+  element.textContent = '';
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, 40);
+    }
+  }
+  type();
+}
+
+function showNextText() {
+  const chatText = document.getElementById('chatText');
+  typeText(texts[index], chatText);
+  index = (index + 1) % texts.length;
+}
+
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const bubble = document.getElementById('chatBubble');
+    bubble.style.display = 'block';
+
+    showNextText(); // tampil pertama
+    setInterval(showNextText, 8000); // ganti tiap 4 detik
+  });
+</script>
+
 </body>
 </html>
