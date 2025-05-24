@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="en" data-bs-theme="dark">
  <head>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
  <script src="assets/js/color-modes.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <meta charset="utf-8">
@@ -27,177 +25,87 @@
 
 
 <style>
-/* Animasi saat hover ke baris tabel */
-#violate-data tbody tr:hover,
-#violate-select tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.05); /* Sedikit highlight */
-  transform: scale(1.01); /* Membesar sedikit */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Bayangan halus */
-  transition: all 0.3s ease; /* Supaya smooth */
-  cursor: pointer; /* Cursor berubah tangan */
+
+  
+
+body {
+  background-color: #0a0a0a;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
 }
 
-/* Pastikan baris normal tidak error transform */
-#violate-data tbody tr,
-#violate-select tbody tr {
-  transition: all 0.1s ease;
+
+table th, table td {
+  vertical-align: middle;
+  font-size: 0.85rem;
 }
-background-color: rgba(0, 123, 255, 0.1); /* biru lembut */
-transform: scale(1.02); /* Membesar lebih kelihatan */
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Bayangan lebih tebal */
+
+h2 {
+  font-weight: bold;
+  color: #00bfff;
+}
+
+.btn {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}
+
+#violate-select th:nth-child(1),
+#violate-select td:nth-child(1),
+#violate-data th:nth-child(1),
+#violate-data td:nth-child(1) {
+  width: 7%;
+}
+#violate-select th:nth-child(2),
+#violate-select td:nth-child(2),
+#violate-data th:nth-child(2),
+#violate-data td:nth-child(2) {
+  width: 30%;
+}
+#violate-select th:nth-child(3),
+#violate-select td:nth-child(3),
+#violate-select th:nth-child(4),
+#violate-select td:nth-child(4),
+#violate-data th:nth-child(3),
+#violate-data td:nth-child(3),
+#violate-data th:nth-child(4),
+#violate-data td:nth-child(4) {
+  width: 5%;
+  max-width: 70px;
+  text-align: center;
+  white-space: normal;
+}
+
+
+    
+@media (max-width: 768px) {
+  #violate-select tfoot td {
+    display: block;
+    width: 100%;
+  }
+  #violate-select tfoot input {
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
+}
+table td:last-child, table th:last-child {
+  width: 50px;
+  max-width: 60px;
+  text-align: center;
+}
+
+/* Kurangi ukuran tombol dan atur tampilannya */
+#violate-data td:last-child button,
+#violate-select td:last-child button {
+  font-size: 10px;
+  padding: 2px 6px;
+  width: 100%;
+  white-space: nowrap;
+}
+
 
 
 </style>
-
-
-    <style>
-	
-	body, table, h1, h2, h3, h4, h5, h6, input, button {
-  font-family: 'Poppins', sans-serif;
-}
-
-	@media (max-width: 768px) {
-  body {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-}
-
-	
-  /* Hanya tbody tabel yang kena styling */
-  #violate-select tbody th:nth-child(2),
-  #violate-data tbody th:nth-child(2),
-  #violate-select tbody td:nth-child(2),
-  #violate-data tbody td:nth-child(2) {
-    width: 40%;
-  }
-
-  #violate-select tbody th:nth-child(3),
-  #violate-select tbody th:nth-child(4),
-  #violate-data tbody th:nth-child(3),
-  #violate-data tbody th:nth-child(4),
-  #violate-select tbody td:nth-child(3),
-  #violate-data tbody td:nth-child(3),
-  #violate-select tbody td:nth-child(4),
-  #violate-data tbody td:nth-child(4) {
-    width: 15%;
-    text-align: center;
-  }
-
-	
-  #resetAllBtn {
-    transition: all 0.1s ease;
-  }
-  #resetAllBtn:hover {
-    transform: scale(1.05);
-  }
-
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .b-example-divider {
-        width: 100%;
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
-
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
-
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .btn-bd-primary {
-        --bd-violet-bg: #712cf9;
-        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-        --bs-btn-font-weight: 600;
-        --bs-btn-color: var(--bs-white);
-        --bs-btn-bg: var(--bd-violet-bg);
-        --bs-btn-border-color: var(--bd-violet-bg);
-        --bs-btn-hover-color: var(--bs-white);
-        --bs-btn-hover-bg: #6528e0;
-        --bs-btn-hover-border-color: #6528e0;
-        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-        --bs-btn-active-color: var(--bs-btn-hover-color);
-        --bs-btn-active-bg: #5a23c8;
-        --bs-btn-active-border-color: #5a23c8;
-      }
-
-      .bd-mode-toggle {
-        z-index: 1500;
-      }
-
-      .bd-mode-toggle .dropdown-menu .active .bi {
-        display: block !important;
-      }
-	  /* Baris charges yang sudah dipilih akan tampak redup */
-#violate-data tbody tr.selected {
-  opacity: 0.5;
-  pointer-events: none; /* opsional: supaya tidak bisa diklik lagi */
-  transition: opacity 0.3s ease;
-}
-
-#codeList, #arrest {
-  min-width: 100%;
-  font-size: 0.9rem;
-}
-body {
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-}
-
-.animate__animated.animate__fadeIn {
-  --animate-duration: 1.0s;
-}
-
-#visitorList {
-  text-align: center;
-  padding-left: 0;
-}
-#visitorList li {
-  list-style: none;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-
-    </style>
 	
 
   </head>
@@ -220,6 +128,7 @@ body {
 	
 </body>
 
+<div id="namaContainer" class="d-flex align-items-center gap-2 bg-dark text-light p-2 rounded mb-3"></div>
 <div class="container my-3">
   <a href="menu.html" class="btn btn-warning">← Kembali ke Menu</a>
 </div>
@@ -229,70 +138,72 @@ body {
   <main>
     <div class="py-5 text-center">
       <img class="d-block mx-auto mb-4" src="assets/brand/sapd.png" alt="" width="72" height="72">
-      <h2>PENAL CODE SAPD SSRP</h2>
+      <h2>PENAL CODE</h2>
+      <span>San Andreas Police Department - SSRP</span>
 	  <p> Bingung? <a href="https://police-state.site/viewforum.php?f=13" target="_blank" >Klik Disini!</a></p>
     </div>
-    <div class="row g-5">
-<div id="namaContainer" class="d-flex align-items-center mb-3">
-  <!-- Nama pengunjung akan masuk di sini -->
+<div class="row g-4">
+  <!-- Tabel utama (kiri) -->
+  <div class="col-md-6">
+    <h4 class="text-muted">Database Violation</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered table-dark" id="violate-data" style="font-size: 0.85rem;">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Violation</th>
+            <th>Jailtime</th>
+            <th>Fine</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tabel pilihan (kanan) -->
+  <div class="col-md-6">
+    <h4 class="text-muted">Selected Charges</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered table-dark" id="violate-select" style="font-size: 0.85rem;">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Violation</th>
+            <th>Jailtime</th>
+            <th>Fine</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2"><b>Code Penal:</b></td>
+            <td colspan="2">
+              <input type="text" id="codeList" class="form-control form-control-sm bg-dark text-light border-secondary" readonly>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-secondary" id="copyCodeBtn">COPY</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Command:</b></td>
+            <td colspan="2">
+              <input type="text" id="arrest" class="form-control form-control-sm bg-dark text-light border-secondary" value="/arrest 0 [Cell ID (1-7)] 0 0" readonly>
+            </td>
+            <td>
+              <button type="button" id="copyarrest" class="btn btn-sm btn-info">Copy</button>
+              <button type="button" id="resetAllBtn" class="btn btn-sm btn-danger">Reset All</button>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
 </div>
 
-<div class="table-responsive">
-  <table id="violate-select" class="table table-dark table-bordered" style="font-size: 0.9em;">
-  <thead>
-    <tr>
-      <th scope="col">Code</th>
-      <th scope="col">Violation</th>
-      <th scope="col">Jailtime</th>
-      <th scope="col">Fine</th>
-      <th scope="col">Action</th>
-    </tr>
-  </thead>
-  <tbody class="align-middle">
-    <!-- Data hasil add akan masuk disini -->
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="2"><b>Code Penal:</b></td>
-      <td colspan="2">
-        <input type="text" id="codeList" class="form-control form-control-sm" readonly>
-      </td>
-      <td>
-        <button class="btn btn-sm btn-secondary" id="copyCodeBtn">COPY</button>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>Command:</b></td>
-      <td colspan="2">
-        <input type="text" id="arrest" class="form-control form-control-sm" value="/arrest 0 [Cell ID (1-7)] 0 0" readonly>
-      </td>
-      <td>
-        <button type="button" id="copyarrest" class="btn btn-sm btn-info">Copy</button>
-		<button type="button" id="resetAllBtn" class="btn btn-sm btn-danger">Reset All Action</button>
-      </td>
-    </tr>
-  </tfoot>
-</table>
-</div>
-            <table class="table table-stripped" id="violate-data" style="font-size: 0.9em;">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Violation</th>
-                  <th>Jailtime</th>
-                  <th>Fine</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody class="align-middle">
-              </tbody>
-              <tfoot>
-                <tr>
-                </tr>
-            </tfoot>
-            </table>
-          </div>
-      </div>
+            
     </div>
   </main>
 
@@ -823,7 +734,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 148",
   "name": "(M)Obstruction of Justice",
   "jailtime": "15",
-  "fine": "1943"
+  "fine": "3943"
   },
   {
   "code": "PEN 301",
@@ -841,7 +752,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 496(d)",
   "name": "(f)Brandishing a Firearm or Weapon",
   "jailtime": "10",
-  "fine": "1350"
+  "fine": "2350"
   },
   {
   "code": "PEN 594",
@@ -931,7 +842,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 240(a)",
   "name": "(M)Simple Assault",
   "jailtime": "15",
-  "fine": "1994"
+  "fine": "2550"
   },
   {
   "code": "PEN 240(c)",
@@ -943,19 +854,19 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 240(b)",
   "name": "(F)Aggravated Assault",
   "jailtime": "25",
-  "fine": "1674"
+  "fine": "3674"
   },
   {
   "code": "PEN 245(a)",
   "name": "(F)Assault With a Deadly Weapon",
   "jailtime": "20",
-  "fine": "1180"
+  "fine": "3180"
   },
   {
   "code": "PEN 243(a)",
   "name": "(F)Assault on Police Officer",
   "jailtime": "40",
-  "fine": "3094"
+  "fine": "3594"
   },
   {
   "code": "PEN 243",
@@ -991,7 +902,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 210",
   "name": "(F)Armed Robbery",
   "jailtime": "30",
-  "fine": "1981"
+  "fine": "2981"
   },
   {
   "code": "PEN 215(a)",
@@ -1015,7 +926,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 484",
   "name": "(F)Attempted Car Theft",
   "jailtime": "25",
-  "fine": "803"
+  "fine": "1803"
   },
   {
   "code": "PEN 405",
@@ -1027,7 +938,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 406",
   "name": "(F)Committed a group criminal assault with or without weapons",
   "jailtime": "30",
-  "fine": "2193"
+  "fine": "3193"
   },
   {
   "code": "PEN 407",
@@ -1195,7 +1106,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 456",
   "name": "(M)Reckless Driving and Endangerment",
   "jailtime": "25",
-  "fine": "1210"
+  "fine": "3210"
   },
   {
   "code": "PEN 102",
@@ -1207,19 +1118,19 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 103",
   "name": "(F)Attempting to Flee/Elude Police",
   "jailtime": "10",
-  "fine": "740"
+  "fine": "1740"
   },
   {
   "code": "PEN 104",
   "name": "(F)Fleeing Traffic Stop",
   "jailtime": "15",
-  "fine": "849"
+  "fine": "2849"
   },
   {
   "code": "PEN 105",
   "name": "(F)Fleeing Police Resulting in Inj/Prop Damage or Death",
   "jailtime": "20",
-  "fine": "1176"
+  "fine": "3176"
   },
   {
   "code": "PEN 106",
@@ -1315,19 +1226,19 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 187(b)",
   "name": "(F)Attempted Murder",
   "jailtime": "30",
-  "fine": "3271"
+  "fine": "2271"
   },
   {
   "code": "PEN 664",
   "name": "(F)Attempted Murder of Police Officer",
   "jailtime": "25",
-  "fine": "2314"
+  "fine": "3314"
   },
   {
   "code": "PEN 665",
   "name": "(F)Murder of Police Officer",
   "jailtime": "60",
-  "fine": "3214"
+  "fine": "4214"
   },
   {
   "code": "PEN 182",
@@ -1429,7 +1340,7 @@ $('#removeCodeBtn').click(function() {
   "code": "PEN 496",
   "name": "(F)Illegal Possession of Firearm",
   "jailtime": "25",
-  "fine": "971"
+  "fine": "2971"
   },
   {
   "code": "PEN 496(d)",
@@ -1782,6 +1693,8 @@ resetInactivityTimer();
   
   updateOnlineUsers();
   setInterval(updateOnlineUsers, 30000);
+
+  
   </script>
   
 
