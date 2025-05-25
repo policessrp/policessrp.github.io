@@ -50,31 +50,16 @@ h2 {
   padding: 2px 6px;
 }
 
-#violate-select th:nth-child(1),
-#violate-select td:nth-child(1),
-#violate-data th:nth-child(1),
-#violate-data td:nth-child(1) {
-  width: 7%;
-}
-#violate-select th:nth-child(2),
-#violate-select td:nth-child(2),
-#violate-data th:nth-child(2),
-#violate-data td:nth-child(2) {
-  width: 30%;
-}
-#violate-select th:nth-child(3),
-#violate-select td:nth-child(3),
-#violate-select th:nth-child(4),
-#violate-select td:nth-child(4),
-#violate-data th:nth-child(3),
-#violate-data td:nth-child(3),
-#violate-data th:nth-child(4),
-#violate-data td:nth-child(4) {
-  width: 5%;
-  max-width: 70px;
-  text-align: center;
-  white-space: normal;
-}
+#violate-select th:nth-child(1), 
+#violate-select td:nth-child(1) { width: 8%; }   /* Code */
+#violate-select th:nth-child(2), 
+#violate-select td:nth-child(2) { width: 30%; }  /* Violation */
+#violate-select th:nth-child(3), 
+#violate-select td:nth-child(3) { width: 10%;   text-align: center;
+  white-space: nowrap; }  /* Jailtime */
+#violate-select th:nth-child(4), 
+#violate-select td:nth-child(4) { width: 10%;   text-align: center;
+  white-space: nowrap; }  /* Fine */
 
 
     
@@ -103,6 +88,9 @@ table td:last-child, table th:last-child {
   white-space: nowrap;
 }
 
+.dataTables_filter {
+  margin-top: -30px;
+}
 
 
 </style>
@@ -165,7 +153,6 @@ table td:last-child, table th:last-child {
   <!-- Tabel pilihan (kanan) -->
   <div class="col-md-6">
     <h4 class="text-muted">Selected Charges</h4>
-    <div class="table-responsive">
       <table class="table table-bordered table-dark" id="violate-select" style="font-size: 0.85rem;">
         <thead>
           <tr>
@@ -178,29 +165,34 @@ table td:last-child, table th:last-child {
         </thead>
         <tbody class="align-middle"></tbody>
         <tfoot>
-          <tr>
-            <td colspan="2"><b>Code Penal:</b></td>
-            <td colspan="2">
-              <input type="text" id="codeList" class="form-control form-control-sm bg-dark text-light border-secondary" readonly>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-secondary" id="copyCodeBtn">COPY</button>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2"><b>Command:</b></td>
-            <td colspan="2">
-              <input type="text" id="arrest" class="form-control form-control-sm bg-dark text-light border-secondary" value="/arrest 0 [Cell ID (1-7)] 0 0" readonly>
-            </td>
-            <td>
-              <button type="button" id="copyarrest" class="btn btn-sm btn-info">Copy</button>
-              <button type="button" id="resetAllBtn" class="btn btn-sm btn-danger">Reset All</button>
-            </td>
-          </tr>
+<tfoot>
+    <tr>
+    <td class="text-start" colspan="5">
+    <label for="suspectid" class="form-label">Suspect ID:</label>
+    <input type="te" id="suspectid" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Masukkan ID Player">
+    </td>
+  </tr>
+  <tr>
+  <tr>
+    <td class="text-start" colspan="5">
+      <b>Code Penal:</b>
+      <input type="text" id="codeList" class="form-control form-control-sm bg-dark text-light border-secondary mt-1" readonly>
+    </td>
+  </tr>
+    <td class="text-start" colspan="5">
+      <b>Command:</b>
+      <input type="text" id="arrest" class="form-control form-control-sm bg-dark text-light border-secondary mt-1" value="/arrest 0 [Cell ID (1-7)] 0 0" readonly>
+      <div class="mt-2 d-flex justify-content-end gap-2">
+        <button type="button" id="copyarrest" class="btn btn-primary btn-sm">Copy</button>
+        <button type="button" id="resetAllBtn" class="btn btn-danger btn-sm">Reset All</button>
+      </div>
+    </td>
+  </tr>
+</tfoot>
+
         </tfoot>
       </table>
     </div>
-  </div>
 </div>
 
             
@@ -250,7 +242,7 @@ $('#violate-select').on('click', '.copy-btn', function () {
     var cleanCode = code.replace(/\s+/g, ' ').trim();
     var cleanViolation = violation.trim();
 
-    var textToCopy = '/su [ID] ' + cleanCode + ' ' + cleanViolation;
+    var textToCopy = '/su' + ' ' + suspectid + ' ' + cleanCode + ' ' + cleanViolation;
 
     navigator.clipboard.writeText(textToCopy).then(function () {
         Swal.fire({
@@ -320,7 +312,16 @@ $('#removeCodeBtn').click(function() {
 
   $(document).ready(function() {
       // Retrieve JSON data from "jsonexdata.json" file
-      let suspectid = 0;
+      // Saat input ID berubah, update command arrest
+$('#suspectid').on('input', function() {
+  suspectid = $(this).val();
+  var textarrest = '/arrest ' + suspectid + ' [Cell ID (1-7)] ' +
+                   (jailtime < maxjailtime ? jailtime : maxjailtime) + ' ' +
+                   (fine < maxfine ? fine : maxfine);
+  $('#arrest').val(textarrest);
+});
+suspectid = $(this).val() || 0;
+
       let jailtime = 0;
       let fine = 0;
       let maxjailtime = 500;
@@ -1478,11 +1479,14 @@ $('#violate-data button').each(function() {
 });
 
 
-        $('.btn-light').click(function () {
-          suspectid = $('#suspectid').val();
-          var textarrest = '/arrest ' + suspectid + ' [Cell ID (1-7)] ' + jailtime + ' ' + fine;
-          $('#arrest').val(textarrest);
-        });
+$('#suspectid').on('input', function () {
+  suspectid = $(this).val();
+  var textarrest = '/arrest ' + suspectid + ' [Cell ID (1-7)] ' +
+                   (jailtime < maxjailtime ? jailtime : maxjailtime) + ' ' +
+                   (fine < maxfine ? fine : maxfine);
+  $('#arrest').val(textarrest);
+});
+
 // Khusus tombol Copy di tabel (btn-info di dalam #violate-select)
 $('#violate-select').on('click', '.btn-info', function() {
     let code = $(this).attr('code');
