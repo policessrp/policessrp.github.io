@@ -346,13 +346,13 @@ document.getElementById('generate').addEventListener('click', () => {
 
 const allWeapons = form.querySelectorAll('input[name="weapon"]');
 const weapon = Array.from(allWeapons).map(w => {
-  return w.checked ? `[cbc] ${w.value}` : `[ ] ${w.value}`;
+  return w.checked ? `[cbc] ${w.value}` : `[cb] ${w.value}`;
 }).join('\n');
 
 
 const allCategories = form.querySelectorAll('input[name="incident_category"]');
 const incidentCategory = Array.from(allCategories).map(c => {
-  return c.checked ? `[cbc] ${c.value}` : `[ ] ${c.value}`;
+  return c.checked ? `[cbc] ${c.value}` : `[cb] ${c.value}`;
 }).join('\n');
 
 
