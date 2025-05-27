@@ -96,6 +96,18 @@ td {
   vertical-align: middle;
 }
 
+/* Hilangkan spinner di input type number (Chrome, Safari, Edge, Opera) */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hilangkan spinner di Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 
 </style>
 	
@@ -173,14 +185,17 @@ td {
     <tr>
     <td class="text-start" colspan="5">
     <label for="suspectid" class="form-label">Suspect ID:</label>
-    <input type="te" id="suspectid" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Masukkan ID Player">
+    <input type="number" id="suspectid" class="form-control form-control-sm bg-dark text-light border-secondary" placeholder="Masukkan ID Player" min="0" step="1">
     </td>
   </tr>
   <tr>
   <tr>
     <td class="text-start" colspan="5">
       <b>Code Penal:</b>
-      <input type="text" id="codeList" class="form-control form-control-sm bg-dark text-light border-secondary mt-1" readonly>
+<div class="input-group mt-1">
+  <input type="text" id="codeList" class="form-control form-control-sm bg-dark text-light border-secondary" readonly>
+  <button class="btn btn-outline-light btn-sm" type="button" id="copyCodeBtn">Copy PenCode</button>
+</div>
     </td>
   </tr>
     <td class="text-start" colspan="5">
@@ -196,6 +211,7 @@ td {
 
         </tfoot>
       </table>
+      
     </div>
 </div>
 
@@ -248,20 +264,44 @@ $('#violate-select').on('click', '.copy-btn', function () {
 
     var textToCopy = '/su' + ' ' + suspectid + ' ' + cleanCode + ' ' + cleanViolation;
 
-    navigator.clipboard.writeText(textToCopy).then(function () {
-        Swal.fire({
-            icon: 'success',
-            title: 'Command berhasil disalin!',
-            html: '<code>' + textToCopy + '</code>',
-            confirmButtonText: 'OK'
-        });
-    }).catch(function (error) {
-        Swal.fire(
-            'Oops!',
-            'Gagal menyalin ke clipboard!',
-            'error'
-        );
-    });
+navigator.clipboard.writeText(textToCopy).then(() => {
+  // Notifikasi tengah layar fade
+  const notif = document.createElement('div');
+  notif.textContent = '✓✓Command berhasil disalin!';
+  notif.style.position = 'fixed';
+  notif.style.top = '50%';
+  notif.style.left = '50%';
+  notif.style.transform = 'translate(-50%, -50%)';
+  notif.style.padding = '12px 20px';
+  notif.style.background = '#222';
+  notif.style.color = '#fff';
+  notif.style.borderRadius = '8px';
+  notif.style.fontSize = '16px';
+  notif.style.opacity = '0';
+  notif.style.transition = 'opacity 0.3s ease';
+  notif.style.zIndex = '9999';
+
+  document.body.appendChild(notif);
+
+  // Fade in
+  requestAnimationFrame(() => {
+    notif.style.opacity = '1';
+  });
+
+  // Fade out dan hapus
+  setTimeout(() => {
+    notif.style.opacity = '0';
+    setTimeout(() => notif.remove(), 300);
+  }, 1500);
+
+  // Nonaktifkan tombol copy setelah berhasil
+  const copyBtn = document.querySelector(`.copy-btn[code="${code}"]`);
+  if (copyBtn) {
+    copyBtn.disabled = true;
+    copyBtn.classList.add('disabled'); // Opsional styling
+    copyBtn.textContent = '✓ Copied';
+  }
+});
 });
 
 
@@ -1469,7 +1509,24 @@ if (!selectedCodes.includes(code)) {
               .draw();
         });
         });
-		
+
+// Saat tombol COPY diklik
+$('#copyCodeBtn').click(function() {
+  var copyText = document.getElementById("codeList");
+  copyText.select();
+  document.execCommand("copy");
+
+  // Feedback visual
+  Swal.fire({
+    icon: 'success',
+    title: 'Disalin!',
+    text: 'Kode Penal berhasil disalin ke clipboard.',
+    timer: 1000,
+    showConfirmButton: false
+  });
+});
+
+
 $('#violate-select').on('click', '.btn-danger', function () {
     var code = $(this).attr('code');
 
@@ -1548,6 +1605,19 @@ $('#violate-select').on('click', '.btn-info', function() {
 // Khusus tombol Copy Command (id="copyarrest") dengan warning
 var shownWarning = false;
 $('#copyarrest').off('click').on('click', function() {
+    const suspectid = $('#suspectid').val().trim();
+
+    if (!suspectid) {
+        Swal.fire({
+            icon: 'error',
+            title: 'ID Kosong!',
+            text: 'Silakan masukkan Suspect ID terlebih dahulu sebelum menyalin command!',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Oke'
+        });
+        return;
+    }
+
     var copyArrest = $('#arrest').val();
     var textarea = document.createElement('textarea');
     textarea.value = copyArrest;
@@ -1568,6 +1638,7 @@ $('#copyarrest').off('click').on('click', function() {
         shownWarning = true;
     }
 });
+
         $('#violate-select').on('click', '.btn-info', function() {
             let result = jsonData.filter(x=> x.code == $(this).attr("code"));
             $.each(result, function(index, charge) {
