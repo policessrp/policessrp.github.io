@@ -92,6 +92,10 @@ table td:last-child, table th:last-child {
   margin-top: -30px;
 }
 
+td {
+  vertical-align: middle;
+}
+
 
 </style>
 	
@@ -1380,6 +1384,20 @@ suspectid = $(this).val() || 0;
   "fine": "1117"
   }
          ];
+         jsonData = jsonData.map(item => {
+  let jail = parseInt(item.jailtime, 10);
+  let type = 'JAIL';
+  if (isNaN(jail)) {
+    jail = 0;
+    if (typeof item.jailtime === 'string') {
+      if (item.jailtime.toUpperCase().includes('TICKET')) type = 'TICKET';
+      else if (item.jailtime.toUpperCase().includes('IMPOUND')) type = 'IMPOUND';
+      else type = 'OTHER';
+    }
+  }
+  return { ...item, jailtime: jail, type };
+});
+
 		 
         var tableBody = $("#violate-data tbody");
 
@@ -1389,7 +1407,18 @@ suspectid = $(this).val() || 0;
           // Create table cells and fill them with the person's data
           row.append($("<td></td>").text(charge.code));
           row.append($("<td></td>").text(charge.name));
-          row.append($("<td></td>").text(charge.jailtime));
+let jailIcon = '';
+if (charge.type === 'JAIL') {
+  jailIcon = '🔒 ' + charge.jailtime;
+} else if (charge.type === 'TICKET') {
+  jailIcon = '💸 TICKET';
+} else if (charge.type === 'IMPOUND') {
+  jailIcon = '🚓 IMPOUND';
+} else {
+  jailIcon = '❓';
+}
+row.append($("<td></td>").text(jailIcon));
+
           row.append($("<td></td>").text(charge.fine));
           var button = $("<td></td>");
           var convertcharge = 'item-' + charge.code.replace(/[ .]/g, function(match) {
@@ -1421,7 +1450,11 @@ if (!selectedCodes.includes(code)) {
 }
             var cbody = $("#violate-select tbody");
             $.each(result, function(index, charge) {
-              jailtime = jailtime + parseInt(charge.jailtime, 10);
+              let jail = parseInt(charge.jailtime, 10);
+              if (!isNaN(jail)) {
+              jailtime += jail;
+}
+
               fine = fine + parseInt(charge.fine, 10);
               var convertcharge = 'item-' + charge.code.replace(/[ .]/g, function(match) {
                return match === ' ' ? '-' : '';
@@ -1447,7 +1480,11 @@ $('#violate-select').on('click', '.btn-danger', function () {
     // Update jailtime dan fine
     let result = jsonData.filter(x => x.code == code);
     $.each(result, function(index, charge) {
-        jailtime = jailtime - parseInt(charge.jailtime, 10);
+        let jail = parseInt(charge.jailtime, 10);
+if (!isNaN(jail)) {
+  jailtime -= jail;
+}
+
         fine = fine - parseInt(charge.fine, 10);
 
         var textarrest = '/arrest ' + suspectid + ' [Cell ID (1-7)] ' +
@@ -1524,7 +1561,7 @@ $('#copyarrest').off('click').on('click', function() {
         Swal.fire({
             icon: 'warning',
             title: 'Peringatan!',
-            text: 'Mohon doublecheck lagi pasal sesuai yang diberikan untuk menghindari suspensionmu!',
+            text: 'Mohon check lagi pasal sesuai dan jumlah jailtime ((menghindari bug 500 menit))!',
             confirmButtonColor: '#d33',
             confirmButtonText: 'Saya mengerti'
         });
