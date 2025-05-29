@@ -133,6 +133,11 @@
       <input type="file" name="evidence_collect_file" id="evidence-collect-input" accept="image/*" class="form-control">
       <input type="hidden" name="evidence_collect_url" id="evidence-collect-url">
     </div>
+    <div class="mb-3">
+  <label class="form-label">Charges (masukkan satu per baris)</label>
+  <textarea name="charges" class="form-control" rows="4"></textarea>
+  </div>
+
 <div class="mb-3">
   <label class="form-label">Arrest Record (Upload Gambar)</label>
   
@@ -145,8 +150,6 @@
   </label>
 
   <!-- Hidden input tetap untuk URL Imgur -->
-  <input type="hidden" name="arrest_record_url" id="arrest-record-url">
-</div>
 
       <input type="hidden" name="arrest_record_url" id="arrest-record-url">
     </div>
@@ -357,6 +360,7 @@ const incidentCategory = Array.from(allCategories).map(c => {
 
 
   const suspectIdentification = form['suspect_identification'].value;
+  const charges = form['charges'].value;
   const suspectPhoto = form['suspect_photo_url'].value;
   const chronology = form['chronology'].value;
   const incidentPhoto = form['incident_photo_url'].value;
@@ -401,11 +405,11 @@ Evidence Collect:
 [/spoiler]
 Charges:
 [spoiler]
-SS /mdc >> Arrest record suspect
+${charges}
 [/spoiler]
 Arrest Record:
 [spoiler]
-[img]${arrestURL}[/img]
+${arrestURL ? `[img]${arrestURL}[/img]` : '[i]Belum ada upload Arrest Record[/i]'}
 [/spoiler]
 [/table]
 [hr]
